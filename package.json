@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "build:docs": "ng build core && ng build docs --configuration production --no-ssr --deploy-url /angular-pixijs/ --base-href /angular-pixijs/"
+    "build:docs:pages": "ng build core && ng build docs --configuration production,pages --no-ssr"
   },
   "private": true,
   "dependencies": {

@@ -98,6 +98,29 @@
               ],
               "outputHashing": "all"
             },
+            "pages": {
+              "deployUrl": "/angular-pixijs/",
+              "baseHref": "/angular-pixijs/",
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "apps/docs/public"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "node_modules/@taiga-ui/icons/src",
+                  "output": "assets/taiga-ui/icons"
+                },
+                {
+                  "glob": "**/404.html",
+                  "input": "pages",
+                  "output": ""
+                }
+              ],
+              "index": {
+                "input": "pages/index.html"
+              }
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
