@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "build:docs": "ng build docs --configuration production --no-ssr"
+    "build:docs": "ng build core && ng build docs --configuration production --no-ssr"
   },
   "private": true,
   "dependencies": {
