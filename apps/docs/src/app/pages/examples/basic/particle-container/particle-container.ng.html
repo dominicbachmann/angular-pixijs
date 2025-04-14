@@ -1,0 +1,7 @@
+<pixi-container>
+  @if (texture(); as texture) {
+    @for (maggot of maggots; track $index) {
+      <pixi-sprite [pixiProperties]="maggot()" [texture]="texture" />
+    }
+  }
+</pixi-container>

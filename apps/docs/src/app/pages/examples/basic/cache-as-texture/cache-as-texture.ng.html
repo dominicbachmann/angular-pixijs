@@ -1,0 +1,7 @@
+<pixi-container [pixiProperties]="containerPosition()" #alienContainer>
+  @if (aliens(); as aliens) {
+    @for (alien of aliens; track $index) {
+      <pixi-sprite [pixiProperties]="alien()" />
+    }
+  }
+</pixi-container>

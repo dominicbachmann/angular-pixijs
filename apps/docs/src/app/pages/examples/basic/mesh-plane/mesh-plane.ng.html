@@ -1,0 +1,14 @@
+@if (grassBg(); as texture) {
+  <pixi-mesh-plane
+    #plane
+    *pixiArgs="[
+      {
+        texture,
+        verticesX: 10,
+        verticesY: 10,
+      },
+    ]"
+    [x]="100"
+    [y]="100"
+  />
+}

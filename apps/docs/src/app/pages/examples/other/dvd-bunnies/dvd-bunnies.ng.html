@@ -1,0 +1,7 @@
+@if (bunnyTexture(); as bunnyTexture) {
+  <pixi-container #bunniesContainer>
+    @for (x of bunnies; track x) {
+      <pixi-sprite [x]="x" [texture]="bunnyTexture"></pixi-sprite>
+    }
+  </pixi-container>
+}

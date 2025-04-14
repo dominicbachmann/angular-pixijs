@@ -9,6 +9,7 @@ import {
   runInInjectionContext,
 } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { PIXI } from './application';
 
 class PixiOutletEnvironmentInjector extends EnvironmentInjector {
   constructor(
@@ -18,12 +19,16 @@ class PixiOutletEnvironmentInjector extends EnvironmentInjector {
     super();
   }
 
+  // eslint-disable-next-line
+  // @ts-ignore
   override get<T>(
     token: ProviderToken<T>,
     notFoundValue?: T,
     flags?: InjectOptions
   ): T | null {
-    if (token === RendererFactory2) {
+    // TODO: Also handle other PIXI related tokens
+    // ALSO: Try to always resolve closest parent
+    if (token === RendererFactory2 || token === PIXI) {
       return this.ngpEnvInjector.get<T>(token, notFoundValue, flags);
     }
 
@@ -59,6 +64,9 @@ export class PixiRouterOutlet extends RouterOutlet {
         ? environmentInjector
         : createEnvironmentInjector(
             [],
+
+            // eslint-disable-next-line
+            // @ts-ignore
             new PixiOutletEnvironmentInjector(environmentInjector, this.environmentInjector)
           );
 
