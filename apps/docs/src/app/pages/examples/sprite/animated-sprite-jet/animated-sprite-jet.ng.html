@@ -1,0 +1,11 @@
+@if (jetSpriteArgs(); as animatedSpriteArgs) {
+  <pixi-animated-sprite
+    *pixiArgs="animatedSpriteArgs"
+    [x]="x"
+    [y]="y"
+    [anchor]="anchor"
+    [animationSpeed]="animationSpeed"
+    [rotation]="rotation()"
+    #jet
+  />
+}

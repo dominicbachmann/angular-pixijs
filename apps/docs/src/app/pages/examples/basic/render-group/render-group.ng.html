@@ -1,0 +1,7 @@
+@if (treeTexture(); as texture) {
+  <pixi-container *pixiArgs="[{ isRenderGroup: true }]" #worldContainer>
+    @for (tree of trees; track tree) {
+      <pixi-sprite [texture]="texture" [pixiProperties]="tree" />
+    }
+  </pixi-container>
+}

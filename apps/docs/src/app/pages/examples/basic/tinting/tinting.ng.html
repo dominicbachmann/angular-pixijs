@@ -1,0 +1,5 @@
+@if (eggHead(); as eggHead) {
+  @for (alien of aliens; track $index) {
+    <pixi-sprite [pixiProperties]="alien()" [texture]="eggHead" />
+  }
+}

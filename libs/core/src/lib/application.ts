@@ -1,8 +1,9 @@
 import {
-  afterNextRender,
   Component,
+  ComponentRef,
   createEnvironmentInjector,
-  ElementRef,
+  DestroyRef,
+  effect,
   EnvironmentInjector,
   inject,
   InjectionToken,
@@ -10,17 +11,20 @@ import {
   input,
   RendererFactory2,
   Type,
-  viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Application } from 'pixi.js';
+import { Application, ApplicationOptions } from 'pixi.js';
 import { PixiRendererFactory } from './renderer';
+import { Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export const PIXI = new InjectionToken<Application>('PIXI');
 
+export type NgxPixiApplicationOptions = Partial<ApplicationOptions>;
+
 @Component({
   selector: 'pixi-application',
-  template: `<canvas #appContainer></canvas> `,
+  template: ``,
   styles: `
     :host {
       display: block;
@@ -31,28 +35,38 @@ export const PIXI = new InjectionToken<Application>('PIXI');
 })
 export class PixiApplication {
   readonly scene = input.required<Type<unknown>>();
+  readonly initOptions = input<NgxPixiApplicationOptions>();
 
   private readonly environmentInjector = inject(EnvironmentInjector);
   private readonly injector = inject(Injector);
   private readonly vcr = inject(ViewContainerRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('appContainer');
-  private readonly appContainer = viewChild.required('appContainer', {
-    read: ViewContainerRef,
-  });
+  private app = new Application();
 
-  private readonly app = new Application();
+  private readonly didInit = new Subject<void>();
+
+  private createdScene: ComponentRef<unknown> | undefined;
 
   constructor() {
-    afterNextRender(async () => {
-      const canvas = this.canvas();
+    effect(() => {
+      const initOptions = this.initOptions();
+      this.createdScene?.destroy();
 
-      await this.app.init({
-        resizeTo: this.vcr.element.nativeElement,
-        canvas: canvas.nativeElement,
+      // TODO: Find out how to properly reuse canvas
+
+      if (this.app.renderer) {
+        this.app.destroy(true);
+      }
+      this.app = new Application();
+      this.app.init(initOptions).then(() => {
+        this.didInit.next();
       });
+    });
 
-      const container = this.appContainer();
+    this.didInit.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.vcr.element.nativeElement.appendChild(this.app.canvas);
+
       const environmentInjector = createEnvironmentInjector(
         [
           PixiRendererFactory,
@@ -68,10 +82,21 @@ export class PixiApplication {
         this.environmentInjector
       );
 
-      container.createComponent(this.scene(), {
+      this.createdScene = this.vcr.createComponent(this.scene(), {
         environmentInjector,
         injector: this.injector,
       });
+    });
+
+    this.destroyRef.onDestroy(() => {
+      try {
+        this.app.destroy(true, {
+          children: true,
+        });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (_: unknown) {
+        // empty
+      }
     });
   }
 }

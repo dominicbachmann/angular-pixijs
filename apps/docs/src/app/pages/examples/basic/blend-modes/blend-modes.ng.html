@@ -1,0 +1,29 @@
+@if (pandaTexture(); as texture) {
+  @if (rainbowTexture(); as rainbowTexture) {
+    @for (panda of pandas(); track $index) {
+      <pixi-container [x]="panda.x" [y]="panda.y">
+        <pixi-sprite
+          [texture]="texture"
+          [width]="100"
+          [height]="100"
+          [anchor]="0.5"
+          [position]="{ x: size / 2, y: size / 2 }"
+          [rotation]="panda.rotation"
+        />
+        <pixi-sprite
+          [texture]="rainbowTexture"
+          [width]="size"
+          [height]="size"
+          [blendMode]="panda.blendMode"
+        />
+        <pixi-text
+          #text
+          [text]="panda.blendMode"
+          [style]="{ fontSize: 16, fontFamily: 'short-stack' }"
+          [x]="size / 2 - $any(text).width / 2"
+          [y]="size - $any(text).height"
+        />
+      </pixi-container>
+    }
+  }
+}

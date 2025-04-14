@@ -6,6 +6,14 @@
   "bracketSpacing": true,
   "arrowParens": "avoid",
   "trailingComma": "es5",
-  "bracketSameLine": true,
-  "printWidth": 95
+  "bracketSameLine": false,
+  "printWidth": 95,
+  "overrides": [
+    {
+      "files": "*.ng.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
 }
