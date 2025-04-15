@@ -113,12 +113,12 @@
                 },
                 {
                   "glob": "**/404.html",
-                  "input": "pages",
+                  "input": "apps/docs/github-pages",
                   "output": ""
                 }
               ],
               "index": {
-                "input": "pages/index.html"
+                "input": "apps/docs/github-pages/index.html"
               }
             },
             "development": {
